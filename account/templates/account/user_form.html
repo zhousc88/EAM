@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% block title %}用户管理{% endblock %}
+{% block main %}
+    <div class="panel panel-success">
+    <div class="panel-heading">
+    <h1 class="panel-title"> {% if object %}{{ object }}{% else %}新增用户{% endif %}</h1></div>
+    <div class="panel-body">
+    <form action="." method="post" class="form-horizontal" >
+    <table class="table table-hover" style="padding-left: 50px">
+        <tr><td>{{ form.username.label_tag }}</td><td>{{ form.username }}</td><td>{{ form.username.help_text }}{{ form.username.errors }}</td></tr>
+		<tr><td>{{ form.last_name.label_tag }}{{ form.first_name.label_tag }}</td><td>{{ form.last_name }} {{ form.first_name }}</td><td>{{ form.get_full_name.help_text }} {{ form.first_name.help_text }}{{ form.first_name.errors }}</td></tr>
+        <tr><td>{{ form.email.label_tag }}</td><td>{{ form.email }}</td><td>{{ form.email.help_text }}{{ form.email.errors }}</td></tr>
+        <tr><td>{{form.is_active.label_tag }}</td><td>{{form.is_active }}</td><td>{{form.is_active.help_text }}{{ form.is_active.errors }}</td></tr>
+        <tr><td>{{ form.is_staff.label_tag }}</td><td>{{ form.is_staff }}</td><td>{{ form.is_staff.help_text }}{{ form.is_staff.errors }}</td></tr>
+        <tr><td>{{p_form.gender.label_tag}}</td><td>{{p_form.gender}}</td><td>{{p_form.gender.help_text}}{{ p_form.gender.errors }}</td></tr>
+        <tr><td>{{ p_form.phone.label_tag }}</td><td>{{ p_form.phone }}</td><td>{{ p_form.phone.help_text }}{{ p_form.phone.errors }}</td></tr>
+        <tr><td>{{ p_form.date_of_birth.label_tag }} /td><td>{{ p_form.date_of_birth }}</td><td>{{ p_form.date_of_birth.help_text }}{{ p_form.date_of_birth.errors }}</td></tr>
+        <tr><td>{{ p_form.status.label_tag}} </td><td>{{ p_form.status  }}</td><td>{{ p_form.status.help_text  }}{{ p_form.status.errors }}</td></tr>
+        <tr><td>{{ p_form.department.label_tag}}</td><td>{{ p_form.department}}</td><td>{{ p_form.department.help_text}}{{ p_form.department.errors }}</td></tr>
+        <tr><td>{{ p_form.post.label_tag }}</td><td>{{ p_form.post }}</td><td>{{ p_form.post.help_text }}{{ p_form.post.errors }}</td></tr>
+    <tr>{% if form.errors or p_form.errors%}<td>{{ p_form.errors }}{{ form.errors }}</td><td></td><td></td>{% endif %}</tr>
+        <tr><td></td><td><input type="submit" value="提 交" class="button btn-default btn-sm" name="_save"></td>
+   <td>{% if  not object %} <input type="submit" value="提交继续新增" class="button btn-default btn-sm">{% endif %}</td></tr>
+	</table>
+{% csrf_token %}
+    </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

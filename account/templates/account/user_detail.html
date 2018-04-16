@@ -1,0 +1,27 @@
+<{% extends "main.html" %}
+{% block title %}用户{{ object.username}}{% endblock %}
+{% block main %}
+    <div class="panel panel-info">
+    <div class="panel-heading"> <h1 class="panel-title"> {{ object.profile}}</h1></div>
+<div class="panel-body">
+    <table class="table table-hover">
+		<tr><td>登录名    </td><td>{{ object.username }}</td></tr>
+		<tr><td>用户名    </td><td>{{ object.last_name }} {{ object.first_name }}</td></tr>
+        <tr><td>E-mail    </td><td>{{ object.email }}</td></tr>
+        <tr><td>账户状态  </td><td>{% if object.is_active %}启用{% else %}禁用{% endif %}</td></tr>
+        <tr><td>后台权限  </td><td>{% if object.is_staff %}允许访问{% else %}禁止访问{% endif %}</td></tr>
+        <tr><td>上次登录时间</td><td>{{ object.last_login }}</td></tr>
+        <tr><td>创建时间  </td><td>{{ object.date_joined }}</td></tr>
+        <tr><td>性别      </td><td>{% if object.profile.gender == 'M' %}男{% else %}女{% endif %}</td></tr>
+        <tr><td>手机号码  </td><td>{{ object.profile.phone }}</td></tr>
+        <tr><td>出生时间  </td><td>{{ object.profile.date_of_birth }}</td></tr>
+        <tr><td>职务状态  </td><td>{% if object.profile.status == 'ON' %}在职{% else %}离职{% endif %}</td></tr>
+        <tr><td>部门      </td><td>{{ object.profile.department}}</td></tr>
+        <tr><td>岗位      </td><td>{{ object.profile.post }}</td></tr>
+	</table>
+</div>
+        <div class="panel-footer">
+         <a type="button"   href="{% url "account:user_edit" object.id %}" class="button btn-default btn-sm" name="_save">编辑<a>
+        </div>
+</div>
+{% endblock %}

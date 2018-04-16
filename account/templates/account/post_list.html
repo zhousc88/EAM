@@ -1,0 +1,133 @@
+{% extends "main.html" %}
+{% block title %}岗位管理{% endblock %}
+{% block main %}
+    <h1 class="page-header">岗位管理</h1>
+<table  class="table table-striped table-hover">
+<caption style="padding-left: 30px">
+    <span class="button btn-default"></span>
+     <a class="button btn-primary btn-sm glyphicon glyphicon-plus" href="{% url "account:post_create" %}">新增</a>
+    <a class="button btn-primary btn-sm glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal"  id="modalbtn">删除</a>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">你确定删除以下岗位</h4>
+            </div>
+            <div class="modal-body" id="p1">在这里添加一些文本</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="Onbtn" type="button" class="btn btn-primary" onclick="btnClick()">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+    </div>
+</caption>
+              <thead>
+                <tr>
+                  <th scope="col" class=" sorted"><input type="checkbox" name="checkall" id="checkboxall" onchange="selectAll()"/>ID</th>
+                  <th >名称</th>
+                  <th>状态</th>
+                  <th>排序号</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for post in object_list %}
+                <tr>
+                  <td><input type="checkbox"  value="{{ post.name }}" name="checkbox" id="{{ post.id }}"/>{{ post.id }}</td>
+                  <td>{{ post.name }}</td>
+                    {% if post.active %}
+                  <td>启用</td>
+                    {% else %}
+                    <td>禁用</td>
+                    {% endif %}
+                  <td>{{ post.order }}</td>
+                  <td>
+                     <a href="{% url "account:post_edit" post.id %}" class="button btn-default">编辑</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+
+<div style="float: right">
+{% include "pages.html" %}
+</div>
+
+
+
+<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js">
+</script>
+<script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.
+cookie.min.js "></script>
+ <script>
+ var csrftoken = $.cookie("csrftoken");
+  function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+  }
+}
+});
+  var cheid = [];
+    var chestr = [];
+$(document).ready(function() {
+    $("#modalbtn").click(function () {
+        var str = document.getElementsByName("checkbox");
+        var objarray = str.length;
+
+
+        for (i = 0; i < objarray; i++) {
+            if (str[i].checked == true) {
+                chestr.push(str[i].value);
+                cheid.push(str[i].id)
+            }
+            if (chestr == "") {
+                document.getElementById("p1").innerHTML = "请选择岗位！";
+                document.getElementById("Onbtn").className = "btn btn-primary disabled"
+            }
+            else {
+                document.getElementById("p1").innerHTML = ("您要删除的岗位是：" + chestr);
+                document.getElementById("Onbtn").className = "btn btn-primary"
+            }
+        }
+    })
+});
+function btnClick(){
+  $.ajax({
+        url:"{% url "account:post_delete" %}",
+        type:"POST",
+        headers:{"X-CSRFToken":csrftoken},
+        data:{'post_id':cheid,
+        'postname':chestr},
+         success: function (res){
+             if (res['status'] == 'ok'){
+                 alert("删除成功")
+             }
+             else {
+                    alert("删除失败");}
+                    location.reload();
+            }
+  });
+        }
+function selectAll() {
+    var all = document.getElementById('checkboxall');
+    var one = document.getElementsByName('checkbox');
+    if (all.checked == true) {
+        for (var i = 0; i < one.length; i++) {
+            one[i].checked = true;
+        }
+    } else {
+        for (var j = 0; j < one.length; j++) {
+            one[j].checked = false;
+        }
+    }
+}
+     </script>
+
+
+{% endblock %}

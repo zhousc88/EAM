@@ -1,0 +1,10 @@
+{% if page_obj %}
+
+    <ul class="pagination pagination-lg">
+<li{% if page_obj.number == 1 %} class="disabled"{% endif %}><a href="#">&laquo;</a></li>{{ i }}
+    {% for i in page_obj.paginator.page_range %}
+    <li><a href="?page={{ i }}">{{ i }}</a></li>{% endfor %}
+    <li{% if page_obj.number == paginator.num_pages %} class="disabled"{% endif %}><a href="#">&raquo;</a></li>
+{% endif %}
+</ul>
+

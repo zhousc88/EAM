@@ -1,0 +1,111 @@
+{% extends "main.html" %}
+{% block title %}用户管理{% endblock %}
+{% block main %}
+    <div class="panel panel-primary">
+    <div class="panel-heading">
+    <h1 class="panel-title">人员管理</h1></div>
+    <div class="panel-body">
+<table  class="table table-striped table-hover" >
+<form action="{% url "account:department_delete" %}" method="POST" >
+<caption style="padding-left: 30px">
+    <a  href="{% url "account:department_create" %}" class="button btn-primary btn-sm glyphicon glyphicon-plus">新增</a>
+    <a  class="button btn-primary btn-sm glyphicon glyphicon-trash" data-toggle="modal" data-target="#myModal"  id="modalbtn">删除</a>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">你确定删除以下用户</h4>
+            </div>
+            <div class="modal-body" id="p1">在这里添加一些文本</div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id=Onbtn type="submit" class="btn btn-primary" value="delete" >提交更改</button>
+                {% csrf_token %}
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+    </div>
+</caption>
+
+              <thead>
+                <tr>
+                  <th scope="col" class=" sorted"><input type="checkbox" name="checkall" id="checkboxall" onchange="selectAll()"/>ID</th>
+                  <th >用户名</th>
+                  <th>姓名</th>
+                    <th>Email</th>
+                  <th>账户状态</th>
+                    <th>在线时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for obj in object_list %}
+                <tr>
+                  <td><input type="checkbox"  value="{{ obj.username }}" name="checkbox" id="{{ obj.id}}"/>{{ obj.id }}</td>
+                  <td>{{ obj.username }}</td>
+                <td>{{ obj.last_name }}{{ obj.first_name }}</td>
+                <td>{{ obj.email }}</td>
+                    {% if obj.is_active %}
+                  <td>启用</td>
+                    {% else %}
+                    <td>禁用</td>
+                    {% endif %}
+                    <td>{{ obj.last_login }}</td>
+                  <td>
+                      <a href="{% url "account:user_detail" obj.id %}" class="button btn-default">查看</a>
+                     <a href="{% url "account:user_edit" obj.id %}" class="button btn-default">编辑</a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody></form>
+            </table>
+</div>
+<div class="panel-footer" style="float: right">
+{% include "pages.html" %}
+</div>
+    </div>
+<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js">
+</script>
+ <script>
+    var chestr = [];
+ $(document).ready(function() {
+    $("#modalbtn").click(function () {
+        var str = document.getElementsByName("checkbox");
+        var objarray = str.length;
+        for (i = 0; i < objarray; i++) {
+            if (str[i].checked == true) {
+                chestr.push(str[i].value)
+            }
+            if (chestr == "") {
+                document.getElementById("p1").innerHTML = "请选择用户！";
+                document.getElementById("Onbtn").className = "btn btn-primary disabled"
+            }
+            else {
+                document.getElementById("p1").innerHTML = ("您要删除的用户是：" + chestr);
+                document.getElementById("Onbtn").className = "btn btn-primary"
+            }
+        }
+    })
+     });
+
+function selectAll() {
+    var all = document.getElementById('checkboxall');
+    var one = document.getElementsByName('checkbox');
+    if (all.checked == true) {
+        for (var i = 0; i < one.length; i++) {
+            one[i].checked = true;
+        }
+    } else {
+        for (var j = 0; j < one.length; j++) {
+            one[j].checked = false;
+        }
+    }
+}
+ </script>
+
+{% endblock %}
+
+
+
+

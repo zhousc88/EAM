@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}资产管理系统{% endblock %}
+{% block content %}
+    <h2 style="padding-left: 30px"> 退出登录</h2>
+<div class="alert alert-info" style="padding-left: 40px;font-size: larger">您已经退出管理系统，您可以<a href="{% url "account:login" %}"> 重新登录</a>
+</div>
+
+{% endblock %}

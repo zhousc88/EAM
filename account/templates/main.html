@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ request.user }}|资产管理{% endblock %}
+{% block link %}
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/dashboard.css"%}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+          {% if request.user.is_authenticated %}
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">切换导航</span>
+              <span class="icon-bar">ZHOUSC</span>
+          </button>
+          <a class="navbar-brand" href="{% url "account:dashboard" %}#">资产管理</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url "account:user_detail" request.user.id %}" class="glyphicon glyphicon-user"> 欢迎{{ request.user }}</a></li>
+            <li><a href="/admin/ ">配置</a></li>
+            <li><a href="{% url "account:passwd_change" %}">密码更改</a></li>
+            <li><a href="{% url "account:logout" %}">注销</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+          {% endif %}
+      </div>
+    </nav>
+
+    <div class="container-fluid" >
+    {% if request.user.is_authenticated %}
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar" style="width: 18%">
+          <ul class="nav nav-sidebar">
+
+            <li {% if section == 'index' %}class="active"{% endif %}><a href="{% url "account:dashboard" %}">个人首页<span class="sr-only">(current)</span></a></li>
+            <li{% if section == 'department'%} class="active"{% endif %}><a href="{% url "account:department_list" %}">部门管理</a></li>
+            <li{% if section == 'post' %} class="active"{% endif %}><a href="{%  url "account:post_list" %}">岗位管理</a></li>
+            <li{% if section == 'user' %} class="active"{% endif %}><a href="{%  url "account:user_list" %}">人员管理</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="https://v3.bootcss.com/examples/dashboard/">Nav item</a></li>
+            <li><a href="https://v3.bootcss.com/examples/dashboard/">Nav item again</a></li>
+            <li><a href="https://v3.bootcss.com/examples/dashboard/">One more nav</a></li>
+            <li><a href="https://v3.bootcss.com/examples/dashboard/">Another nav item</a></li>
+            <li><a href="https://v3.bootcss.com/examples/dashboard/">More navigation</a></li>
+          </ul>
+ {% endif %}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-left: 50px">
+        {% block message %}
+            {% if messages %}
+                {% for message in messages %}
+           <p class="alert alert-{{ message.tags}}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+         {% endblock %}
+            {% block main %}
+            {% endblock %}
+{% endblock %}

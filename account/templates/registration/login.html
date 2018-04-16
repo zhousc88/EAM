@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+    <title>{% block title %}登录{% endblock %}</title>
+
+{% block content %}
+<div class="container">
+
+{% if user.is_authenticated %}
+    你已经登录成功，前往<a href="{% url "account:dashboard" %}"> 首页</a>
+    {% else %}
+<div  style="padding-top: 150px;max-width: 400px;margin: auto" >
+<div class="panel panel-primary" >
+        <div class="panel-heading" style="align-content: center;">
+    <h2 class="panel-title" style=" font-size: larger">资产管理系统</h2>
+       </div>
+    <br>
+    <div class="panel-body" >
+<form action="{% url 'account:login' %}" method="post" class="form-horizontal" role="form">
+        <div class="form-group form-group-lg">
+
+    <span  style="font-size: larger;margin-left: 30px"> {{ form.username.label_tag}}</span>
+            <span style="font-size: larger;margin-left: 30px" >{{ form.username }}</span>
+            <P>{{ form.username.errors }}</P>
+  </div>
+  <div class="from-group form-group-lg">
+
+    <span style="font-size: larger;margin-left: 30px" >{{ form.password.label_tag }} </span>
+      <span style="font-size: larger;margin-left: 30px" >{{ form.password }}</span>
+      <P>{{ form.password.errors }}</P>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </div>
+        {% csrf_token %}
+        <input type="hidden" name="next " value="{{ next }}"><br>
+    <p>
+        {% if form.errors %}
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}{% endif %}
+    </p>
+        <p align="center"><button class="btn btn-lg btn-primary btn-block" type="submit">登录</button></p>
+    </form>
+        </div>
+    </div>
+    </div>
+    </div> <!-- /container -->
+{% endif %}
+{% endblock %}
